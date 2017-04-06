@@ -3,9 +3,7 @@ package entities.user;
 import db.DBGetter;
 import entities.Account;
 
-import java.util.LinkedList;
 import java.util.List;
-import java.util.logging.Logger;
 
 /**
  * Created by Егор on 03.04.17.
@@ -131,10 +129,14 @@ public class User extends AbstractUser{
                 '}';
     }
 
-    public boolean changeBlockStatus(Account acc){
 
-        if(role_id==1){
-            acc.setBlockStatus(acc.getBlockStatus()==1 ? 0 : 1);
+    public boolean changeBlockStatus(Account acc){
+        if(role_id==1 && acc.getBlockStatus()==1 ){
+            acc.setBlockStatus(0);
+            return true;
+        }
+        if(role_id==0 && acc.getBlockStatus()==0 ){
+            acc.setBlockStatus(1);
             return true;
         }
         else{

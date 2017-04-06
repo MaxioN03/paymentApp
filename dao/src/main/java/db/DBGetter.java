@@ -9,7 +9,6 @@ import properties.PropertiesLoader;
 import java.sql.*;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Properties;
 
 /**
  * Created by Егор on 03.04.17.
@@ -19,7 +18,6 @@ public class DBGetter {
         DBGetter db = new DBGetter();
         System.out.println(db.getCard());
         System.out.println(db.getAccount());
-
     }
 
     private static PropertiesLoader prop = PropertiesLoader.getPropFromFile();
