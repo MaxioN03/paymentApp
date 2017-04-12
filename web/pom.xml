@@ -12,10 +12,6 @@
     <artifactId>web</artifactId>
 
     <dependencies>
-        <dependency>
-            <groupId>com.netcracker</groupId>
-            <artifactId>dao</artifactId>
-        </dependency>
     </dependencies>
 
 

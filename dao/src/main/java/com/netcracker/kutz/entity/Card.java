@@ -1,12 +1,20 @@
-package entities;
+package com.netcracker.kutz.entity;
 
 /**
- * Created by Егор on 03.04.17.
+ * Created by Егор on 07.04.17.
  */
 public class Card {
     private int id;
     private String number;
     private String validThru;
+
+    public Card() {
+    }
+
+    public Card(String number, String validThru) {
+        this.number = number;
+        this.validThru = validThru;
+    }
 
     public Card(int id, String number, String validThru) {
         this.id = id;
@@ -40,13 +48,13 @@ public class Card {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Card)) return false;
+        if (this == o) {return true;}
+        if (!(o instanceof Card)) {return false;}
 
         Card card = (Card) o;
 
-        if (id != card.id) return false;
-        if (!number.equals(card.number)) return false;
+        if (id != card.id) {return false;}
+        if (!number.equals(card.number)) {return false;}
         return validThru.equals(card.validThru);
     }
 
@@ -60,10 +68,11 @@ public class Card {
 
     @Override
     public String toString() {
-        return "Card{" +
-                "id=" + id +
-                ", number='" + number + '\'' +
-                ", validThru='" + validThru + '\'' +
-                '}';
+        final StringBuilder sb = new StringBuilder("Card{");
+        sb.append("id=").append(id);
+        sb.append(", number='").append(number).append('\'');
+        sb.append(", validThru='").append(validThru).append('\'');
+        sb.append('}');
+        return sb.toString();
     }
 }
