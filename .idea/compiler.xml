@@ -7,12 +7,14 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="dao" />
+        <module name="service" />
         <module name="web" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="dao" target="1.5" />
       <module name="paymentApp" target="1.5" />
+      <module name="service" target="1.5" />
       <module name="web" target="1.5" />
     </bytecodeTargetLevel>
   </component>

@@ -11,6 +11,7 @@
     <modules>
         <module>dao</module>
         <module>web</module>
+        <module>service</module>
     </modules>
 
     <dependencies>

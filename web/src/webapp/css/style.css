@@ -1,0 +1,29 @@
+body{
+	text-align: center;
+	font-family: "Lato", sans-serif;
+}
+
+input, select{
+	margin: 1%;
+}
+
+table{
+	width: 80%;
+	align: center;
+	border-collapse: collapse;
+	margin: auto;
+	text-align: center;
+	border: 1px solid #ccc;
+    background-color: #f1f1f1;
+}
+
+th, td{
+	padding: 1%;
+	border: 1px solid #ccc;
+}
+
+th{
+	background-color: #b2b2b2;
+}
+
+
