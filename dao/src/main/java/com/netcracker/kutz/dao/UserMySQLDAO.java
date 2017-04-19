@@ -1,6 +1,6 @@
 package com.netcracker.kutz.dao;
 
-import com.netcracker.kutz.daoUtil.Connector;
+import com.netcracker.kutz.util.Connector;
 import com.netcracker.kutz.entity.User;
 import com.netcracker.kutz.enums.UserType;
 import com.netcracker.kutz.exception.DAOException;
@@ -15,33 +15,29 @@ import java.util.List;
 /**
  * Created by Егор on 08.04.17.
  */
-public class UserDAOMySQL implements UserDAO {
+public class UserMySQLDAO implements UserDAO {
 
     private final String SQL_ADD_USER = "INSERT INTO `payments`.`users` (`role_id`, `login`, `password`, `name`, `surname`) VALUES (?, ?, ?, ?, ?);";
     private final String SQL_UPDATE_USER = "UPDATE `payments`.`users` SET `role_id`=?, `login`=?, `password`=?, `name`=?, `surname`=? WHERE `user_id`=?;";
     private final String SQL_DELETE_USER = "DELETE FROM `payments`.`users` WHERE `user_id`=?;";
     private final String SQL_GET_ALL_USER = "SELECT * FROM `payments`.`users`";
     private final String SQL_GET_BY_ID_USER = "SELECT * FROM payments.users WHERE user_id = ?;";
+    private final String SQL_GET_BY_LOGIN_USER = "SELECT * FROM payments.users WHERE login = ?;";
 
-    public void add(User user) throws DAOException, SQLException {
+    public void add(User user) throws DAOException{
         Connector cnr = new Connector();
         Connection cn = cnr.getConnection();
-        PreparedStatement st = cn.prepareStatement(SQL_ADD_USER);
-        if (user.getUserType() == UserType.ADMINISTRATOR) {
-            st.setInt(1, 1);
-        } else {
-            st.setInt(1, 0);
+        PreparedStatement st = null;
+        try {
+            st = cn.prepareStatement(SQL_ADD_USER);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
-        st.setString(2, user.getLogin());
-        st.setString(3, user.getPassword());
-        st.setString(4, user.getName());
-        st.setString(5, user.getSurname());
-        st.executeUpdate();
-        st.close();
-        cn.close();
+
     }
 
-    public boolean update(User user) throws DAOException {
+    public boolean update(User user){
         Connector cnr = new Connector();
         Connection cn = cnr.getConnection();
         PreparedStatement st = null;
@@ -73,7 +69,7 @@ public class UserDAOMySQL implements UserDAO {
         }
     }
 
-    public boolean delete(int id) throws DAOException {
+    public boolean delete(int id){
         Connector cnr = new Connector();
         Connection cn = cnr.getConnection();
         PreparedStatement st = null;
@@ -95,7 +91,7 @@ public class UserDAOMySQL implements UserDAO {
         }
     }
 
-    public List<User> getAll() throws DAOException {
+    public List<User> getAll(){
         List<User> result = new LinkedList<User>();
         Connector cnr = new Connector();
         Connection cn = cnr.getConnection();
@@ -118,17 +114,18 @@ public class UserDAOMySQL implements UserDAO {
             e.printStackTrace();
 
         } finally {
-            try {
-                st.close();
-                cn.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            //try {
+                //st.close();
+                //cn.close();
+            //} catch (SQLException e) {
+            //    e.printStackTrace();
+            //}
         }
         return result;
     }
 
-    public User getByID(int id) throws DAOException {
+
+    public User getByID(int id){
         User result = new User();
         Connector cnr = new Connector();
         Connection cn = cnr.getConnection();
@@ -138,7 +135,7 @@ public class UserDAOMySQL implements UserDAO {
             st.setInt(1,id);
             ResultSet rs = st.executeQuery();
 
-            while (rs.next()) {
+            if (rs.next()) {
                 UserType userType;
                 if (rs.getInt(2) == 0) {
                     userType = UserType.USER;
@@ -163,4 +160,38 @@ public class UserDAOMySQL implements UserDAO {
         return result;
     }
 
+    public User getByLogin(String login){
+        User result = new User();
+        Connector cnr = new Connector();
+        Connection cn = cnr.getConnection();
+        PreparedStatement st = null;
+        try {
+            st = cn.prepareStatement(SQL_GET_BY_LOGIN_USER);
+            st.setString(1,login);
+            ResultSet rs = st.executeQuery();
+
+            if (rs.next()) {
+                UserType userType;
+                if (rs.getInt(2) == 0) {
+                    userType = UserType.USER;
+                } else {
+                    userType = UserType.ADMINISTRATOR;
+                }
+                result = (new User(rs.getInt(1), userType, rs.getString(3),
+                        rs.getString(4), rs.getString(5), rs.getString(6)));
+
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+
+        } finally {
+            try {
+                st.close();
+                cn.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return result;
+    }
 }

@@ -1,6 +1,6 @@
 package com.netcracker.kutz.dao;
 
-import com.netcracker.kutz.daoUtil.Connector;
+import com.netcracker.kutz.util.Connector;
 import com.netcracker.kutz.entity.Account;
 import com.netcracker.kutz.enums.BlockStatus;
 import com.netcracker.kutz.exception.DAOException;
@@ -18,27 +18,33 @@ import static com.netcracker.kutz.enums.BlockStatus.UNLOCKED;
 /**
  * Created by Егор on 10.04.17.
  */
-public class AccountDAOMySQL implements AccountDAO {
+public class AccountMySQLDAO implements AccountDAO {
     private final String SQL_ADD_ACCOUNT = "INSERT INTO `payments`.`account` (`card_id`, `user_id`, `sum`, `block_status`) VALUES (?, ?, ?, ?);";
     private final String SQL_GET_ALL_ACCOUNT = "SELECT * FROM payments.account LIMIT 0, 1000;";
     private final String SQL_GET_BY_ID_ACCOUNT = "SELECT * FROM payments.account where acc_id=?;";
     private final String SQL_DELETE_ACCOUNT = "DELETE FROM payments.account where acc_id=?;";
 
-    public void add(Account account) throws DAOException, SQLException {
+    public void add(Account account) throws DAOException{
         Connector cnr = new Connector();
         Connection cn = cnr.getConnection();
-        PreparedStatement st = cn.prepareStatement(SQL_ADD_ACCOUNT);
-        st.setInt(1, account.getCard_id());
-        st.setInt(2, account.getUser_id());
-        st.setInt(3, account.getSum());
-        if (account.getBlockStatus() == BlockStatus.BLOCKED) {
-            st.setInt(4, 1);
-        } else {
-            st.setInt(4, 0);
+        PreparedStatement st = null;
+        try {
+            st = cn.prepareStatement(SQL_ADD_ACCOUNT);
+            st.setInt(1, account.getCard_id());
+            st.setInt(2, account.getUser_id());
+            st.setInt(3, account.getSum());
+            if (account.getBlockStatus() == BlockStatus.BLOCKED) {
+                st.setInt(4, 1);
+            } else {
+                st.setInt(4, 0);
+            }
+            st.executeUpdate();
+            st.close();
+            cn.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
-        st.executeUpdate();
-        st.close();
-        cn.close();
+
     }
 
     public List<Account> getAll() throws DAOException {
@@ -84,7 +90,7 @@ public class AccountDAOMySQL implements AccountDAO {
             ResultSet rs = st.executeQuery();
             BlockStatus blockStatus;
 
-            while (rs.next()) {
+            if (rs.next()) {
                 if (rs.getInt(5) == 0) {
                     blockStatus = UNLOCKED;
                 } else {

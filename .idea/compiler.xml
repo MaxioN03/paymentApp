@@ -12,10 +12,10 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="dao" target="1.5" />
-      <module name="paymentApp" target="1.5" />
-      <module name="service" target="1.5" />
-      <module name="web" target="1.5" />
+      <module name="dao" target="1.7" />
+      <module name="paymentApp" target="1.7" />
+      <module name="service" target="1.7" />
+      <module name="web" target="1.7" />
     </bytecodeTargetLevel>
   </component>
 </project>
