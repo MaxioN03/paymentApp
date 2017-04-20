@@ -19,10 +19,15 @@ import static com.netcracker.kutz.enums.BlockStatus.UNLOCKED;
  * Created by Егор on 10.04.17.
  */
 public class AccountMySQLDAO implements AccountDAO {
+    private final String SQL_UPDATE_AMOUNT = "UPDATE `payments`.`account` SET `sum`=? WHERE  `acc_id`=?;";
     private final String SQL_ADD_ACCOUNT = "INSERT INTO `payments`.`account` (`card_id`, `user_id`, `sum`, `block_status`) VALUES (?, ?, ?, ?);";
     private final String SQL_GET_ALL_ACCOUNT = "SELECT * FROM payments.account LIMIT 0, 1000;";
     private final String SQL_GET_BY_ID_ACCOUNT = "SELECT * FROM payments.account where acc_id=?;";
     private final String SQL_DELETE_ACCOUNT = "DELETE FROM payments.account where acc_id=?;";
+    private final String SQL_GET_CARD_NUMBER_BY_ID = "SELECT number FROM payments.card where payments.card.card_id=?;";
+    private final String SQL_CHANGE_BLOCKSTATUS = "UPDATE `payments`.`account` SET `block_status`=? WHERE  `acc_id`=?;";
+
+
 
     public void add(Account account) throws DAOException{
         Connector cnr = new Connector();
@@ -47,7 +52,7 @@ public class AccountMySQLDAO implements AccountDAO {
 
     }
 
-    public List<Account> getAll() throws DAOException {
+    public List<Account> getAll(){
         List<Account> result = new LinkedList<Account>();
         Connector cnr = new Connector();
         Connection cn = cnr.getConnection();
@@ -79,7 +84,7 @@ public class AccountMySQLDAO implements AccountDAO {
         return result;
     }
 
-    public Account getByID(int id) throws DAOException {
+    public Account getByID(int id){
         Account result = new Account();
         Connector cnr = new Connector();
         Connection cn = cnr.getConnection();
@@ -121,6 +126,78 @@ public class AccountMySQLDAO implements AccountDAO {
             st = cn.prepareStatement(SQL_DELETE_ACCOUNT);
             st.setInt(1,id);
             st.executeUpdate();
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            try {
+                st.close();
+                cn.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public String getCardNumberByID(int id){
+        String result = null;
+        Connector cnr = new Connector();
+        Connection cn = cnr.getConnection();
+        PreparedStatement st = null;
+        try {
+            st = cn.prepareStatement(SQL_GET_CARD_NUMBER_BY_ID);
+            st.setInt(1,id);
+            ResultSet rs = st.executeQuery();
+            BlockStatus blockStatus;
+            if (rs.next()) {
+                result = rs.getString(1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+
+        } finally {
+            try {
+                st.close();
+                cn.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return result;
+    }
+
+    public void changeBlokStatus(int status, int accID){
+        Connector cnr = new Connector();
+        Connection cn = cnr.getConnection();
+        PreparedStatement st = null;
+        try {
+            st = cn.prepareStatement(SQL_CHANGE_BLOCKSTATUS);
+            st.setInt(1,status);
+            st.setInt(2,accID);
+            st.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                st.close();
+                cn.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public boolean updateAmount(Account account){
+        Connector cnr = new Connector();
+        Connection cn = cnr.getConnection();
+        PreparedStatement st = null;
+        try {
+            st = cn.prepareStatement(SQL_UPDATE_AMOUNT);
+            st.setInt(1, account.getSum());
+            st.setInt(2, account.getId());
+            st.executeUpdate();
+
             return true;
         } catch (SQLException e) {
             e.printStackTrace();

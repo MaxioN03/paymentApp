@@ -25,11 +25,6 @@ public class Connector {
             String host = property.getProperty("SQL_DB_URL");
             String login = property.getProperty("SQL_DB_USERNAME");
             String password = property.getProperty("SQL_DB_PASSWORD");
-
-            System.out.println(host);
-            System.out.println(login);
-            System.out.println(password);
-
             cn = DriverManager.getConnection(host,login,password);
 
 

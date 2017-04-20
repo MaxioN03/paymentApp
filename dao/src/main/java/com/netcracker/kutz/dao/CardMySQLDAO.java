@@ -1,10 +1,12 @@
 package com.netcracker.kutz.dao;
 
-import com.netcracker.kutz.util.Connector;
 import com.netcracker.kutz.entity.Card;
-import com.netcracker.kutz.exception.DAOException;
+import com.netcracker.kutz.util.Connector;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -18,7 +20,7 @@ public class CardMySQLDAO implements  CardDAO {
     private final String SQL_GET_BY_ID_CARD = "SELECT * FROM payments.card where card_id=?;";
     private final String SQL_DELETE_CARD = "DELETE FROM `payments`.`card` WHERE `card_id`=?;";
 
-    public void add(Card card) throws DAOException {
+    public void add(Card card){
         Connector cnr = new Connector();
         Connection cn = cnr.getConnection();
         PreparedStatement st = null;
@@ -35,7 +37,7 @@ public class CardMySQLDAO implements  CardDAO {
 
     }
 
-    public List<Card> getAll() throws DAOException {
+    public List<Card> getAll(){
         List<Card> result = new LinkedList<Card>();
         Connector cnr = new Connector();
         Connection cn = cnr.getConnection();
@@ -61,7 +63,7 @@ public class CardMySQLDAO implements  CardDAO {
         return result;
     }
 
-    public Card getByID(int id) throws DAOException {
+    public Card getByID(int id){
         Card result = new Card();
         Connector cnr = new Connector();
         Connection cn = cnr.getConnection();
@@ -88,7 +90,7 @@ public class CardMySQLDAO implements  CardDAO {
         return result;
     }
 
-    public boolean delete(int id) throws DAOException {
+    public boolean delete(int id){
         Connector cnr = new Connector();
         Connection cn = cnr.getConnection();
         PreparedStatement st = null;

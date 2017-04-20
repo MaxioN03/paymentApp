@@ -1,6 +1,6 @@
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<html>
+<html >
 <head>
     <title>Index</title>
     <link rel="stylesheet" type="text/css" href="../css/style.css">
@@ -16,11 +16,12 @@
     </form>
 </form>
 
-<c:set var="salary" scope="session" value="${2002*2}"/>
-
-<c:if test="${salary > 2000}">
-<p>My salary is: <c:out value="${salary}"/><p>
-</c:if>
+<%
+    String error = (String)request.getAttribute("error");
+    if(error!=null){
+        out.print("Wrong login or password!");
+    }
+%>
 
 </body>
 </html>
