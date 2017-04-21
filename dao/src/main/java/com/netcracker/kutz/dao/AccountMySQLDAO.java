@@ -1,9 +1,8 @@
 package com.netcracker.kutz.dao;
 
-import com.netcracker.kutz.util.Connector;
 import com.netcracker.kutz.entity.Account;
 import com.netcracker.kutz.enums.BlockStatus;
-import com.netcracker.kutz.exception.DAOException;
+import com.netcracker.kutz.util.Connector;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -29,7 +28,7 @@ public class AccountMySQLDAO implements AccountDAO {
 
 
 
-    public void add(Account account) throws DAOException{
+    public void add(Account account){
         Connector cnr = new Connector();
         Connection cn = cnr.getConnection();
         PreparedStatement st = null;
@@ -118,7 +117,7 @@ public class AccountMySQLDAO implements AccountDAO {
         return result;
     }
 
-    public boolean delete(int id) throws DAOException {
+    public boolean delete(int id){
         Connector cnr = new Connector();
         Connection cn = cnr.getConnection();
         PreparedStatement st = null;

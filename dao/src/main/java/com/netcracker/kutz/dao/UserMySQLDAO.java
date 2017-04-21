@@ -1,9 +1,8 @@
 package com.netcracker.kutz.dao;
 
-import com.netcracker.kutz.util.Connector;
 import com.netcracker.kutz.entity.User;
 import com.netcracker.kutz.enums.UserType;
-import com.netcracker.kutz.exception.DAOException;
+import com.netcracker.kutz.util.Connector;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -24,7 +23,7 @@ public class UserMySQLDAO implements UserDAO {
     private final String SQL_GET_BY_ID_USER = "SELECT * FROM payments.users WHERE user_id = ?;";
     private final String SQL_GET_BY_LOGIN_USER = "SELECT * FROM payments.users WHERE login = ?;";
 
-    public void add(User user) throws DAOException{
+    public void add(User user){
         Connector cnr = new Connector();
         Connection cn = cnr.getConnection();
         PreparedStatement st = null;
@@ -123,7 +122,6 @@ public class UserMySQLDAO implements UserDAO {
         }
         return result;
     }
-
 
     public User getByID(int id){
         User result = new User();

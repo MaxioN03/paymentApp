@@ -48,7 +48,7 @@ public class Command {
                 request.getParameter("validThru2") == ""
                 ) {
 
-            request.setAttribute("error", "error");
+            request.setAttribute("error", "Wrong data!");
         } else {
             AccountMySQLDAO accountMySQLDAO = new AccountMySQLDAO();
             CardMySQLDAO cardMySQLDAO = new CardMySQLDAO();
@@ -70,7 +70,7 @@ public class Command {
                 accountMySQLDAO.updateAmount(recipient);
             }
             else {
-                request.setAttribute("error", "error");
+                request.setAttribute("error", "Wrong data!");
             }
         }
         return handleUserPage(request, response);
@@ -100,7 +100,7 @@ public class Command {
                 return page;
             }
         }
-        request.setAttribute("error", "error");
+        request.setAttribute("error", "Wrong login or password!");
         return page;
     }
 

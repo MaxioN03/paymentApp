@@ -15,13 +15,6 @@
         <input type="submit" value="Enter" name="button" formaction="../controller.do" formmethod="get">
     </form>
 </form>
-
-<%
-    String error = (String)request.getAttribute("error");
-    if(error!=null){
-        out.print("Wrong login or password!");
-    }
-%>
-
+    <c:out value="${requestScope.get(\"error\")}"></c:out>
 </body>
 </html>
