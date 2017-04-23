@@ -1,6 +1,9 @@
 package com.netcracker.kutz;
 
 
+import com.netcracker.kutz.command.ActionFactory;
+import com.netcracker.kutz.implement.ActionCommand;
+
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -18,26 +21,29 @@ public class Controller extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws ServletException, IOException {
-        handleRequest(httpServletRequest,httpServletResponse);
+        handleRequest(httpServletRequest, httpServletResponse);
     }
 
     @Override
     protected void doPost(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws ServletException, IOException {
-        handleRequest(httpServletRequest,httpServletResponse);
+        handleRequest(httpServletRequest, httpServletResponse);
     }
 
-    protected void handleRequest(HttpServletRequest request, HttpServletResponse response){
+    protected void handleRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        Command command = new Command();
+        String page;
 
-        try {
-            String page = command.handle(request,response);
-            RequestDispatcher view = request.getRequestDispatcher(page);
-            view.forward(request, response);
-        } catch (ServletException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
+        ActionFactory client = new ActionFactory();
+        ActionCommand command = client.defineCommand(request);
+
+        page = command.execute(request);
+
+
+        if (page != null) {
+            RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(page);
+            dispatcher.forward(request, response);
+        } else {
+
         }
     }
 }

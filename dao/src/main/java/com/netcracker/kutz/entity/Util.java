@@ -8,6 +8,5 @@ public class Util {
         String[] result = validThru.split("/");
         System.out.println(result);
         return result;
-
     }
 }

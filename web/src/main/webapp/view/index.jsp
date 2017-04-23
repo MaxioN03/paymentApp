@@ -12,7 +12,7 @@
         <input type="text" name="login"><br>
         Password:<br>
         <input type="password" name="password"><br>
-        <input type="submit" value="Enter" name="button" formaction="../controller.do" formmethod="get">
+        <input type="submit" value="Login" name="command" formaction="../controller.do" formmethod="get">
     </form>
 </form>
     <c:out value="${requestScope.get(\"error\")}"></c:out>

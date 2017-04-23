@@ -24,6 +24,7 @@ public class AccountMySQLDAO implements AccountDAO {
     private final String SQL_GET_BY_ID_ACCOUNT = "SELECT * FROM payments.account where acc_id=?;";
     private final String SQL_DELETE_ACCOUNT = "DELETE FROM payments.account where acc_id=?;";
     private final String SQL_GET_CARD_NUMBER_BY_ID = "SELECT number FROM payments.card where payments.card.card_id=?;";
+    private final String SQL_GET_USER_LOGIN_BY_ID = "SELECT login FROM payments.users where payments.users.user_id=?;";
     private final String SQL_CHANGE_BLOCKSTATUS = "UPDATE `payments`.`account` SET `block_status`=? WHERE  `acc_id`=?;";
 
 
@@ -66,7 +67,7 @@ public class AccountMySQLDAO implements AccountDAO {
                 } else {
                     blockStatus = BLOCKED;
                 }
-                result.add(new Account(rs.getInt(1), rs.getInt(2), rs.getInt(3),
+                result.add(new Account(rs.getInt(1), rs.getInt(3), rs.getInt(2),
                         rs.getInt(4), blockStatus));
             }
         } catch (SQLException e) {
@@ -84,6 +85,7 @@ public class AccountMySQLDAO implements AccountDAO {
     }
 
     public Account getByID(int id){
+
         Account result = new Account();
         Connector cnr = new Connector();
         Connection cn = cnr.getConnection();
@@ -146,6 +148,33 @@ public class AccountMySQLDAO implements AccountDAO {
         PreparedStatement st = null;
         try {
             st = cn.prepareStatement(SQL_GET_CARD_NUMBER_BY_ID);
+            st.setInt(1,id);
+            ResultSet rs = st.executeQuery();
+            BlockStatus blockStatus;
+            if (rs.next()) {
+                result = rs.getString(1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+
+        } finally {
+            try {
+                st.close();
+                cn.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return result;
+    }
+
+    public String getUserLoginByID(int id){
+        String result = null;
+        Connector cnr = new Connector();
+        Connection cn = cnr.getConnection();
+        PreparedStatement st = null;
+        try {
+            st = cn.prepareStatement(SQL_GET_USER_LOGIN_BY_ID);
             st.setInt(1,id);
             ResultSet rs = st.executeQuery();
             BlockStatus blockStatus;
